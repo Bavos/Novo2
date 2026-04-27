@@ -28,5 +28,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: video-final-mp4
-          path: video-final.mp4
+          name: video-final-mov
+          path: video-final.mov
