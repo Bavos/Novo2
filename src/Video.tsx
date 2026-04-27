@@ -7,7 +7,7 @@ import {Scene3} from './components/Scene3';
 import {Scene4} from './components/Scene4';
 import {Scene5} from './components/Scene5';
 
-export type SceneData = {
+type SceneData = {
   title: string;
   subtitle: string;
   narration: string;
