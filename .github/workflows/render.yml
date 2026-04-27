@@ -23,12 +23,10 @@ jobs:
         run: npm install
 
       - name: Render MP4
-        run: |
-          mkdir -p out
-          npx remotion render video-final out/video.mp4
+        run: npx remotion render src/index.ts video-final.mp4
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: video-final-mp4
-          path: out/video.mp4
+          name: video-final-mov
+          path: video-final.mov
