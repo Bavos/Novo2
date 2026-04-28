@@ -20,6 +20,7 @@ export const Scene4: React.FC<SceneProps> = ({data}) => {
     extrapolateRight: 'clamp',
   });
 
+  const translateY = interpolate(localFrame, [0, 20], [50, 0], {
   const translateY = interpolate(localFrame, [0, 24], [40, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
