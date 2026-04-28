@@ -5,6 +5,7 @@
   "description": "Projeto Remotion para vídeo tutorial de 30 segundos sobre Codex + GitHub + Remotion",
   "scripts": {
     "start": "remotion studio src/index.ts",
+    "render": "mkdir -p out && remotion render video-final out/video.mp4",
     "render": "remotion render src/index.ts video-final.mp4",
     "build": "tsc --noEmit"
   },

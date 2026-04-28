@@ -1,3 +1,5 @@
+import {registerRoot} from 'remotion';
+import {RemotionRoot} from './Root';
 import React from 'react';
 import {Composition, registerRoot} from 'remotion';
 import {Video} from './Video';
