@@ -1,0 +1,23 @@
+{
+  "name": "codex-github-remotion-tutorial",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Projeto Remotion para vídeo tutorial de 30 segundos sobre Codex + GitHub + Remotion",
+  "scripts": {
+    "start": "remotion studio src/index.ts",
+    "render": "mkdir -p out && remotion render video-final out/video.mp4",
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.246",
+    "@remotion/player": "^4.0.246",
+    "remotion": "^4.0.246",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "typescript": "^5.8.3"
+  }
+}
