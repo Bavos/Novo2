@@ -1,24 +1,23 @@
-import React from 'react';
-import {AbsoluteFill, Sequence} from 'remotion';
-import sceneData from '../data/sceneData.json';
-import {Scene1} from './components/Scene1';
-import {Scene2} from './components/Scene2';
-import {Scene3} from './components/Scene3';
-import {Scene4} from './components/Scene4';
-import {Scene5} from './components/Scene5';
+import React from "react";
+import { AbsoluteFill, Sequence } from "remotion";
+import sceneData from "../data/sceneData.json";
+import { Scene1 } from "./components/Scene1";
+import { Scene2 } from "./components/Scene2";
+import { Scene3 } from "./components/Scene3";
+import { Scene4 } from "./components/Scene4";
+import { Scene5 } from "./components/Scene5";
 
 export type SceneData = {
-type SceneData = {
   title: string;
   subtitle: string;
   narration: string;
 };
 
-const scenes = sceneData as SceneData[];
+const scenes = sceneData.scenes as SceneData[];
 
 export const Video: React.FC = () => {
   return (
-    <AbsoluteFill style={{backgroundColor: '#0a0a1a'}}>
+    <AbsoluteFill style={{ backgroundColor: "#0a0a1a" }}>
       <Sequence from={0} durationInFrames={180}>
         <Scene1 data={scenes[0]} />
       </Sequence>
