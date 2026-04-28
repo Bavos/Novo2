@@ -22,15 +22,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Render MP4
-        run: |
-          mkdir -p out
-          npx remotion render src/index.ts video-final out/video.mp4
-          ls -lah out
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: video-final-mp4
-          path: out/video.mp4
-          if-no-files-found: error
+          name: video-final-mov
+          path: video-final.mov

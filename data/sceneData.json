@@ -1,7 +1,7 @@
 [
   {
     "title": "Crie vídeos automáticos com Codex + GitHub + Remotion",
-    "subtitle": "Do JSON ao vídeo final em poucos passos",
+    "subtitle": "Do JSON ao MP4 em poucos passos",
     "narration": "Neste vídeo, você vai ver como gerar um vídeo automaticamente usando Codex, GitHub e Remotion."
   },
   {
@@ -20,8 +20,8 @@
     "narration": "Depois do commit, o GitHub Actions executa o render.yml e inicia a renderização do vídeo com Remotion."
   },
   {
-    "title": "Baixe o vídeo final",
+    "title": "Baixe o vídeo final em MP4",
     "subtitle": "Disponível como artifact ou release",
-    "narration": "No final, o vídeo é gerado e fica disponível para download como artifact ou release."
+    "narration": "No final, o vídeo é gerado em MP4 e fica disponível para download como artifact ou release."
   }
 ]
