@@ -6,12 +6,12 @@
     "jsx": "react-jsx",
     "strict": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2020"]
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
     "types": ["node"]
   },
-  "include": ["src", "remotion.config.ts", "data"]
+  "include": ["src", "data", "remotion.config.ts"]
 }
