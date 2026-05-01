@@ -1,82 +1,399 @@
-import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
-import {GlitchOverlay} from './GlitchOverlay';
-
-export type EnvironmentType =
-  | 'satellite'
-  | 'ai-face'
-  | 'tactical-map'
-  | 'data-center'
-  | 'drone-vision'
-  | 'kill-chain'
-  | 'command-modules'
-  | 'human-loop'
-  | 'critical-confirmation'
-  | 'algorithmic-faith'
-  | 'tragic-glitch'
-  | 'judgement-room'
-  | 'global-battle';
+  import React from 'react';
+import {AbsoluteFill, useCurrentFrame} from 'remotion';
 
 type SceneEnvironmentProps = {
-  environment: EnvironmentType;
-  sceneDuration: number;
+  environment: string;
+  duration?: number;
+  sceneIndex?: number;
 };
 
-const full: React.CSSProperties = {position: 'absolute', inset: 0, overflow: 'hidden'};
-
-export const SceneEnvironment: React.FC<SceneEnvironmentProps> = ({environment, sceneDuration}) => {
+export const SceneEnvironment: React.FC<SceneEnvironmentProps> = ({
+  environment,
+  sceneIndex = 0,
+}) => {
   const frame = useCurrentFrame();
-  const p = interpolate(frame, [0, sceneDuration], [0, 1], {extrapolateRight: 'clamp'});
-  const t = frame / 30;
 
-  const commonHud = (
-    <div style={{...full, color: 'rgba(154,176,199,0.4)', fontFamily: 'monospace', fontSize: 20, padding: 28, display: 'flex', justifyContent: 'space-between'}}>
-      <span>OPS-NET</span>
-      <span>T+{Math.floor(t).toString().padStart(3, '0')}</span>
-    </div>
+  const drift = Math.sin(frame / 40 + sceneIndex) * 24;
+  const slowDrift = Math.sin(frame / 70 + sceneIndex) * 40;
+  const zoom = 1 + frame * 0.00025;
+  const pulse = 0.45 + Math.sin(frame / 12) * 0.15;
+
+  const baseOverlay = (
+    <AbsoluteFill
+      style={{
+        backgroundImage:
+          'linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px)',
+        backgroundSize: '54px 54px',
+        opacity: 0.5,
+      }}
+    />
   );
 
-  const env = {
-    satellite: (
-      <>
-        <div style={{...full, background: 'radial-gradient(circle at 50% 70%, #193149 0%, #04070C 65%)'}} />
-        <div style={{position: 'absolute', width: 1400, height: 1400, borderRadius: '50%', left: -200, bottom: -860, background: 'radial-gradient(circle, #2f5a86 0%, #0f2438 50%, transparent 70%)', transform: `scale(${1 + p * 0.06})`}} />
-      </>
-    ),
-    'ai-face': <div style={{...full, background: 'radial-gradient(circle at 50% 40%, #161f34 0%, #050913 70%)'}} />,
-    'tactical-map': <div style={{...full, background: 'radial-gradient(circle at 50% 50%, #0c1a2c 0%, #04070c 78%)'}} />,
-    'data-center': <div style={{...full, background: 'linear-gradient(180deg, #050a12 0%, #0d1828 50%, #04070c 100%)'}} />,
-    'drone-vision': <div style={{...full, background: 'radial-gradient(circle at 50% 50%, #122335 0%, #04070c 74%)'}} />,
-    'kill-chain': <div style={{...full, background: 'linear-gradient(180deg, #090e18 0%, #131b2e 100%)'}} />,
-    'command-modules': <div style={{...full, background: 'radial-gradient(circle at 50% 50%, #101c30 0%, #04070c 80%)'}} />,
-    'human-loop': <div style={{...full, background: 'radial-gradient(circle at 50% 45%, #131822 0%, #05080e 75%)'}} />,
-    'critical-confirmation': <div style={{...full, background: 'radial-gradient(circle at 50% 50%, #220f17 0%, #0a0b12 74%)'}} />,
-    'algorithmic-faith': <div style={{...full, background: 'radial-gradient(circle at 50% 45%, #141d2e 0%, #06070f 76%)'}} />,
-    'tragic-glitch': <div style={{...full, background: 'radial-gradient(circle at 50% 45%, #2b0f18 0%, #07070b 78%)'}} />,
-    'judgement-room': <div style={{...full, background: 'linear-gradient(180deg, #0b0d12 0%, #151922 100%)'}} />,
-    'global-battle': <div style={{...full, background: 'radial-gradient(circle at 50% 45%, #13283b 0%, #04070c 78%)'}} />
-  }[environment];
+  switch (environment) {
+    case 'satellite':
+      return (
+        <AbsoluteFill style={{background: '#000814', overflow: 'hidden'}}>
+          <AbsoluteFill
+            style={{
+              background:
+                'radial-gradient(circle at 50% 82%, rgba(30,64,175,0.9) 0%, rgba(15,23,42,0.75) 22%, transparent 38%)',
+              transform: `scale(${zoom}) translateX(${drift}px)`,
+            }}
+          />
+          {baseOverlay}
+          <div
+            style={{
+              position: 'absolute',
+              top: 180,
+              left: 140 + slowDrift,
+              width: 220,
+              height: 2,
+              background: 'rgba(56,189,248,0.7)',
+              boxShadow: '0 0 22px rgba(56,189,248,0.7)',
+              transform: 'rotate(-18deg)',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 420,
+              right: 120,
+              color: 'rgba(56,189,248,0.7)',
+              fontSize: 22,
+              letterSpacing: 4,
+            }}
+          >
+            ORBITAL FEED
+          </div>
+        </AbsoluteFill>
+      );
 
-  return (
-    <AbsoluteFill>
-      {env}
-      <div style={{...full, opacity: 0.22, backgroundImage: 'linear-gradient(rgba(78,168,222,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(78,168,222,0.12) 1px, transparent 1px)', backgroundSize: '90px 90px', transform: `translate(${Math.sin(t) * 18}px, ${Math.cos(t * 0.7) * 14}px)`}} />
+    case 'ai-face':
+      return (
+        <AbsoluteFill style={{background: '#020617', overflow: 'hidden'}}>
+          <AbsoluteFill
+            style={{
+              background:
+                'radial-gradient(circle at 45% 40%, rgba(239,68,68,0.32), transparent 28%), radial-gradient(circle at 65% 55%, rgba(56,189,248,0.25), transparent 36%)',
+              transform: `scale(${zoom}) translateX(${drift}px)`,
+            }}
+          />
+          {baseOverlay}
+          <div
+            style={{
+              position: 'absolute',
+              left: 180,
+              top: 430,
+              width: 370,
+              height: 520,
+              borderRadius: '50%',
+              border: '2px solid rgba(56,189,248,0.45)',
+              boxShadow: '0 0 42px rgba(56,189,248,0.25)',
+              transform: `translateX(${slowDrift}px)`,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              left: 460,
+              top: 580,
+              width: 80,
+              height: 80,
+              borderRadius: '50%',
+              background: `rgba(239,68,68,${pulse})`,
+              boxShadow: '0 0 40px rgba(239,68,68,0.8)',
+            }}
+          />
+        </AbsoluteFill>
+      );
 
-      {environment === 'ai-face' && <div style={{position: 'absolute', width: 520, height: 760, left: '28%', top: '18%', border: '1px solid rgba(78,168,222,0.45)', borderRadius: '48% 42% 46% 52%', boxShadow: '0 0 70px rgba(78,168,222,0.25)', transform: `translateX(${Math.sin(t) * 12}px)`}} />}
-      {environment === 'tactical-map' && <div style={{position: 'absolute', width: 700, height: 700, borderRadius: '50%', left: '20%', top: '32%', border: '2px solid rgba(78,168,222,0.3)', transform: `rotate(${frame * 0.8}deg)`}} />}
-      {environment === 'data-center' && <div style={{position: 'absolute', inset: '8% 14%', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 18}}>{Array.from({length: 16}).map((_, i) => <div key={i} style={{border: '1px solid rgba(78,168,222,0.25)', background: `rgba(8,14,24,${0.4 + ((i + frame) % 3) * 0.15})`}} />)}</div>}
-      {environment === 'drone-vision' && <div style={{position: 'absolute', inset: '18% 12%', border: '2px solid rgba(78,168,222,0.45)'}} />}
-      {environment === 'kill-chain' && <div style={{position: 'absolute', left: '50%', top: '12%', bottom: '12%', width: 6, background: 'linear-gradient(180deg, rgba(215,38,61,0.1), rgba(215,38,61,0.85), rgba(215,38,61,0.1))', transform: `translateX(-50%) translateY(${(frame * 4) % 100}px)`}} />}
-      {environment === 'command-modules' && <div style={{position: 'absolute', inset: '20% 14%', display: 'grid', gap: 20}}>{['DETECTAR', 'DECIDIR', 'ATACAR'].map((m, i) => <div key={m} style={{border: '2px solid rgba(78,168,222,0.45)', background: `rgba(10,18,30,${(Math.floor(frame / 20) + i) % 3 === 0 ? 0.85 : 0.35})`, color: '#DDEAF6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'monospace', letterSpacing: '0.2em'}}>{m}</div>)}</div>}
-      {environment === 'human-loop' && <div style={{position: 'absolute', width: 280, height: 520, borderRadius: '50% 50% 30% 30%', left: '37%', top: '34%', background: 'linear-gradient(180deg, rgba(40,60,85,0.6), rgba(10,12,18,0.9))'}} />}
-      {environment === 'critical-confirmation' && <div style={{position: 'absolute', inset: '26% 18%', border: '2px solid rgba(215,38,61,0.7)', display: 'grid', placeItems: 'center', color: '#ff7385', fontFamily: 'monospace', fontSize: 110}}>{10 - Math.floor((frame % 90) / 9)}</div>}
-      {environment === 'algorithmic-faith' && <div style={{...full}}>{Array.from({length: 22}).map((_, i) => <div key={i} style={{position: 'absolute', width: 12, height: 12, borderRadius: '50%', left: `${10 + ((i * 13) % 80)}%`, top: `${8 + ((i * 17 + frame * 0.2) % 84)}%`, background: 'rgba(78,168,222,0.7)'}} />)}</div>}
-      {environment === 'tragic-glitch' && <GlitchOverlay />}
-      {environment === 'judgement-room' && <div style={{position: 'absolute', inset: '60% 16% 15% 16%', borderTop: '2px solid rgba(154,176,199,0.35)', background: 'rgba(10,12,18,0.6)'}} />}
-      {environment === 'global-battle' && <div style={{position: 'absolute', inset: '12% 10%', border: '1px solid rgba(78,168,222,0.45)', borderRadius: 20, transform: `scale(${1 - p * 0.08})`}} />}
+    case 'tactical-map':
+      return (
+        <AbsoluteFill style={{background: '#03111f', overflow: 'hidden'}}>
+          {baseOverlay}
+          <div
+            style={{
+              position: 'absolute',
+              top: 360,
+              left: 190,
+              width: 700,
+              height: 700,
+              borderRadius: '50%',
+              border: '2px solid rgba(56,189,248,0.35)',
+              transform: `rotate(${frame * 0.6}deg)`,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              top: 710,
+              left: 500,
+              width: 24,
+              height: 24,
+              borderRadius: '50%',
+              background: 'rgba(239,68,68,0.9)',
+              boxShadow: '0 0 30px rgba(239,68,68,0.9)',
+            }}
+          />
+        </AbsoluteFill>
+      );
 
-      {commonHud}
-      <div style={{...full, background: 'linear-gradient(180deg, rgba(4,7,12,0.05), rgba(4,7,12,0.38))'}} />
-    </AbsoluteFill>
-  );
+    case 'data-center':
+      return (
+        <AbsoluteFill style={{background: '#020617', overflow: 'hidden'}}>
+          <AbsoluteFill
+            style={{
+              background:
+                'repeating-linear-gradient(90deg, rgba(15,23,42,1) 0px, rgba(15,23,42,1) 70px, rgba(56,189,248,0.12) 72px, rgba(2,6,23,1) 130px)',
+              transform: `scale(${zoom}) translateY(${Math.sin(frame / 40) * 30}px)`,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background:
+                'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.65) 75%)',
+            }}
+          />
+        </AbsoluteFill>
+      );
+
+    case 'drone-vision':
+      return (
+        <AbsoluteFill style={{background: '#07111f', overflow: 'hidden'}}>
+          {baseOverlay}
+          {[0, 1, 2, 3, 4].map((item) => (
+            <div
+              key={item}
+              style={{
+                position: 'absolute',
+                left: 150 + item * 150 + Math.sin(frame / 30 + item) * 20,
+                top: 420 + item * 120,
+                width: 120,
+                height: 90,
+                border: '2px solid rgba(239,68,68,0.7)',
+                boxShadow: '0 0 24px rgba(239,68,68,0.35)',
+              }}
+            />
+          ))}
+          <div
+            style={{
+              position: 'absolute',
+              top: 860,
+              left: 390,
+              width: 300,
+              height: 300,
+              borderRadius: '50%',
+              border: '2px solid rgba(56,189,248,0.55)',
+            }}
+          />
+        </AbsoluteFill>
+      );
+
+    case 'kill-chain':
+      return (
+        <AbsoluteFill style={{background: '#020617', overflow: 'hidden'}}>
+          {baseOverlay}
+          <div
+            style={{
+              position: 'absolute',
+              left: 535,
+              top: 260,
+              width: 8,
+              height: 1300,
+              background:
+                'linear-gradient(to bottom, transparent, rgba(56,189,248,0.9), rgba(239,68,68,0.9), transparent)',
+              transform: `translateY(${Math.sin(frame / 35) * 80}px)`,
+              boxShadow: '0 0 32px rgba(56,189,248,0.7)',
+            }}
+          />
+        </AbsoluteFill>
+      );
+
+    case 'command-modules':
+      return (
+        <AbsoluteFill style={{background: '#030712', overflow: 'hidden'}}>
+          {['DETECTAR', 'DECIDIR', 'ATACAR'].map((label, index) => (
+            <div
+              key={label}
+              style={{
+                position: 'absolute',
+                left: 190,
+                top: 430 + index * 260,
+                width: 700,
+                height: 150,
+                border: '2px solid rgba(56,189,248,0.4)',
+                borderRadius: 24,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: index === Math.floor(frame / 30) % 3 ? '#ef4444' : '#38bdf8',
+                fontSize: 38,
+                fontWeight: 800,
+                letterSpacing: 6,
+                boxShadow: '0 0 30px rgba(56,189,248,0.22)',
+              }}
+            >
+              {label}
+            </div>
+          ))}
+        </AbsoluteFill>
+      );
+
+    case 'human-loop':
+      return (
+        <AbsoluteFill style={{background: '#01040a', overflow: 'hidden'}}>
+          <AbsoluteFill
+            style={{
+              background:
+                'radial-gradient(circle at 50% 35%, rgba(56,189,248,0.22), transparent 35%), radial-gradient(circle at 50% 90%, rgba(0,0,0,1), transparent 40%)',
+              transform: `scale(${zoom})`,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              left: 390,
+              bottom: 390,
+              width: 300,
+              height: 520,
+              borderRadius: '45% 45% 20% 20%',
+              background: 'rgba(0,0,0,0.82)',
+              boxShadow: '0 0 60px rgba(56,189,248,0.18)',
+            }}
+          />
+        </AbsoluteFill>
+      );
+
+    case 'critical-confirmation':
+      return (
+        <AbsoluteFill style={{background: '#120506', overflow: 'hidden'}}>
+          {baseOverlay}
+          <div
+            style={{
+              position: 'absolute',
+              top: 430,
+              left: 140,
+              width: 800,
+              height: 900,
+              border: '3px solid rgba(239,68,68,0.7)',
+              borderRadius: 28,
+              boxShadow: '0 0 55px rgba(239,68,68,0.35)',
+              transform: `translateX(${Math.sin(frame) * 6}px)`,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              top: 510,
+              left: 0,
+              width: '100%',
+              textAlign: 'center',
+              color: '#ef4444',
+              fontSize: 96,
+              fontWeight: 900,
+              opacity: 0.25,
+            }}
+          >
+            {String(5 - (Math.floor(frame / 24) % 5)).padStart(2, '0')}
+          </div>
+        </AbsoluteFill>
+      );
+
+    case 'algorithmic-faith':
+      return (
+        <AbsoluteFill style={{background: '#020617', overflow: 'hidden'}}>
+          {baseOverlay}
+          {[...Array(18)].map((_, i) => (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                left: 100 + ((i * 137) % 820),
+                top: 250 + ((i * 211) % 1300),
+                width: 18,
+                height: 18,
+                borderRadius: '50%',
+                background: 'rgba(56,189,248,0.75)',
+                boxShadow: '0 0 24px rgba(56,189,248,0.8)',
+                transform: `scale(${1 + Math.sin(frame / 15 + i) * 0.4})`,
+              }}
+            />
+          ))}
+        </AbsoluteFill>
+      );
+
+    case 'tragic-glitch':
+      return (
+        <AbsoluteFill style={{background: '#050000', overflow: 'hidden'}}>
+          <AbsoluteFill
+            style={{
+              background:
+                'radial-gradient(circle at center, rgba(239,68,68,0.55), rgba(2,6,23,0.9) 52%, #000 100%)',
+              transform: `translateX(${Math.sin(frame) * 12}px)`,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              top: 720,
+              left: 270,
+              width: 540,
+              height: 300,
+              border: '4px solid rgba(239,68,68,0.9)',
+              boxShadow: '0 0 50px rgba(239,68,68,0.5)',
+            }}
+          />
+        </AbsoluteFill>
+      );
+
+    case 'judgement-room':
+      return (
+        <AbsoluteFill style={{background: '#030303', overflow: 'hidden'}}>
+          <AbsoluteFill
+            style={{
+              background:
+                'radial-gradient(circle at 50% 45%, rgba(56,189,248,0.14), transparent 32%), linear-gradient(#030303, #0f172a)',
+              transform: `scale(${zoom})`,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 420,
+              left: 120,
+              width: 840,
+              height: 120,
+              background: 'rgba(15,23,42,0.85)',
+              borderTop: '2px solid rgba(56,189,248,0.28)',
+            }}
+          />
+        </AbsoluteFill>
+      );
+
+    case 'global-battle':
+      return (
+        <AbsoluteFill style={{background: '#020617', overflow: 'hidden'}}>
+          {baseOverlay}
+          <AbsoluteFill
+            style={{
+              background:
+                'radial-gradient(circle at 50% 50%, rgba(56,189,248,0.25), transparent 35%), radial-gradient(circle at 70% 70%, rgba(239,68,68,0.25), transparent 25%)',
+              transform: `scale(${1 + frame * 0.00045})`,
+            }}
+          />
+        </AbsoluteFill>
+      );
+
+    default:
+      return (
+        <AbsoluteFill
+          style={{
+            background: 'linear-gradient(180deg, #020617, #0f172a, #000)',
+            transform: `scale(${zoom})`,
+          }}
+        />
+      );
+  }
 };
