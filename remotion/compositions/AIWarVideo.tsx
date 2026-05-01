@@ -8,9 +8,14 @@ import {
 import {GlitchOverlay} from '../components/GlitchOverlay';
 import {SceneEnvironment} from '../components/SceneEnvironment';
 import {SceneText} from '../components/SceneText';
-import {theme} from '../styles/theme';
 
-const scenes = [
+type Scene = {
+  text: string;
+  duration: number;
+  environment: EnvironmentType;
+};
+
+const scenes: Scene[] = [
   {text: 'A guerra mudou.', duration: 90, environment: 'satellite'},
   {text: 'A IA entrou no comando.', duration: 90, environment: 'ai-face'},
   {text: 'Dados de drones, satélites e radares.', duration: 90, environment: 'tactical-map'},
