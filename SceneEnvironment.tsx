@@ -1,21 +1,30 @@
 import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
+import {
+  AbsoluteFill,
+  interpolate,
+  useCurrentFrame,
+} from 'remotion';
 
-type SceneEnvironmentProps = {
+type Props = {
   environment: string;
-  duration: number;
-  sceneIndex: number;
+  duration?: number;
+  sceneIndex?: number;
 };
 
-export const SceneEnvironment: React.FC<SceneEnvironmentProps> = ({
+export const SceneEnvironment: React.FC<Props> = ({
   environment,
   duration,
-  sceneIndex,
+  sceneIndex = 0,
 }) => {
   const frame = useCurrentFrame();
 
-  const safeDuration = Number.isFinite(duration) ? duration : 90;
+  // 🔥 GARANTE número válido SEMPRE
+  const safeDuration =
+    typeof duration === 'number' && !isNaN(duration)
+      ? duration
+      : 90;
 
+  // 🔥 SEMPRE números válidos
   const progress = interpolate(
     frame,
     [0, safeDuration],
@@ -34,7 +43,7 @@ export const SceneEnvironment: React.FC<SceneEnvironmentProps> = ({
         <AbsoluteFill
           style={{
             background:
-              'radial-gradient(circle at 50% 80%, #0f172a 0%, #020617 45%, #000 100%)',
+              'radial-gradient(circle at 50% 80%, #0f172a 0%, #020617 50%, #000)',
             transform: `scale(${1 + progress * 0.05}) translateX(${drift}px)`,
           }}
         />
@@ -45,7 +54,7 @@ export const SceneEnvironment: React.FC<SceneEnvironmentProps> = ({
         <AbsoluteFill
           style={{
             background:
-              'radial-gradient(circle at 50% 45%, rgba(239,68,68,0.35), transparent 30%), linear-gradient(180deg, #020617, #111827)',
+              'radial-gradient(circle at 50% 40%, rgba(239,68,68,0.35), transparent 40%), linear-gradient(#020617, #111827)',
             transform: `scale(${1 + progress * 0.04})`,
           }}
         />
@@ -56,8 +65,8 @@ export const SceneEnvironment: React.FC<SceneEnvironmentProps> = ({
         <AbsoluteFill
           style={{
             background:
-              'linear-gradient(135deg, #020617, #0f172a 45%, #00111f)',
-            transform: `translateY(${-progress * 80}px)`,
+              'linear-gradient(135deg, #020617, #0f172a)',
+            transform: `translateY(${-progress * 100}px)`,
           }}
         />
       );
@@ -67,7 +76,7 @@ export const SceneEnvironment: React.FC<SceneEnvironmentProps> = ({
         <AbsoluteFill
           style={{
             background:
-              'repeating-linear-gradient(90deg, #020617 0px, #020617 80px, #0f172a 82px, #0f172a 120px)',
+              'repeating-linear-gradient(90deg, #020617 0px, #020617 80px, #0f172a 82px)',
             transform: `scale(${1 + progress * 0.06})`,
           }}
         />
@@ -78,7 +87,7 @@ export const SceneEnvironment: React.FC<SceneEnvironmentProps> = ({
         <AbsoluteFill
           style={{
             background:
-              'linear-gradient(180deg, #020617, #111827)',
+              'linear-gradient(#020617, #111827)',
             transform: `translateX(${-progress * 80}px)`,
           }}
         />
@@ -89,8 +98,8 @@ export const SceneEnvironment: React.FC<SceneEnvironmentProps> = ({
         <AbsoluteFill
           style={{
             background:
-              'radial-gradient(circle, rgba(239,68,68,0.45), #020617 55%, #000)',
-            transform: `translateX(${Math.sin(frame) * 8}px)`,
+              'radial-gradient(circle, rgba(239,68,68,0.5), #020617 60%, #000)',
+            transform: `translateX(${Math.sin(frame) * 10}px)`,
           }}
         />
       );
@@ -100,7 +109,7 @@ export const SceneEnvironment: React.FC<SceneEnvironmentProps> = ({
         <AbsoluteFill
           style={{
             background:
-              'linear-gradient(180deg, #020617, #0f172a, #000)',
+              'linear-gradient(#020617, #0f172a, #000)',
             transform: `scale(${1 + progress * 0.03})`,
           }}
         />
