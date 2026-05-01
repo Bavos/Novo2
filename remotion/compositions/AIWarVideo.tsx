@@ -1,3 +1,4 @@
+import {theme} from '../styles/theme';
 import React from 'react';
 import {
   AbsoluteFill,
