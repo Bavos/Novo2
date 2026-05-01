@@ -18,7 +18,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          
 
       - name: Install dependencies
         run: npm install
@@ -27,7 +26,7 @@ jobs:
         run: npx remotion browser ensure
 
       - name: Render video
-        run: npx remotion render ModernWarfaremobile out/video.mp4 --composition=ModernWarfareMobile
+        run: npm run render
 
       - name: Upload MP4 artifact
         uses: actions/upload-artifact@v4
