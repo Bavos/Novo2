@@ -1,6 +1,15 @@
 {
   "scripts": {
-    "start": "npx remotion studio src/index.ts",
-    "build": "npx remotion render src/index.ts AIWarAlgorithmic out/ai-war-algorithmic.mp4"
+    "start": "remotion studio src/index.ts",
+    "build": "remotion render src/index.ts AIWarAlgorithmic out/ai-war-algorithmic.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.454",
+    "remotion": "4.0.454",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
   }
 }
