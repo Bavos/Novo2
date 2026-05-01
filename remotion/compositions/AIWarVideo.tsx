@@ -1,6 +1,12 @@
 import React from 'react';
-import {AbsoluteFill, Sequence, interpolate, useCurrentFrame} from 'remotion';
-import {SceneEnvironment, type EnvironmentType} from '../components/SceneEnvironment';
+import {
+  AbsoluteFill,
+  Sequence,
+  interpolate,
+  useCurrentFrame,
+} from 'remotion';
+import {GlitchOverlay} from '../components/GlitchOverlay';
+import {SceneEnvironment} from '../components/SceneEnvironment';
 import {SceneText} from '../components/SceneText';
 
 type Scene = {
@@ -22,8 +28,8 @@ const scenes: Scene[] = [
   {text: 'A confiança vira fé algorítmica.', duration: 120, environment: 'algorithmic-faith'},
   {text: 'Erros podem virar tragédias.', duration: 120, environment: 'tragic-glitch'},
   {text: 'Quem responde pela decisão?', duration: 120, environment: 'judgement-room'},
-  {text: 'A guerra agora segue o ritmo dos algoritmos.', duration: 90, environment: 'global-battle'}
-];
+  {text: 'A guerra agora segue o ritmo dos algoritmos.', duration: 90, environment: 'global-battle'},
+] as const;
 
 export const AIWarVideo: React.FC = () => {
   const frame = useCurrentFrame();
@@ -31,29 +37,49 @@ export const AIWarVideo: React.FC = () => {
   let cursor = 0;
 
   return (
-    <AbsoluteFill>
-      {scenes.map((scene) => {
+    <AbsoluteFill style={{backgroundColor: theme.colors.background}}>
+      {scenes.map((scene, index) => {
         const from = cursor;
         cursor += scene.duration;
+
         const localFrame = frame - from;
-        const fadeOpacity = interpolate(
+
+        const opacity = interpolate(
           localFrame,
-          [0, 12, scene.duration - 12, scene.duration],
+          [0, 8, scene.duration - 10, scene.duration - 1],
           [0, 1, 1, 0],
           {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
         );
 
         return (
-          <Sequence key={`${scene.environment}-${from}`} from={from} durationInFrames={scene.duration}>
-            <AbsoluteFill style={{opacity: fadeOpacity}}>
-              <SceneEnvironment environment={scene.environment} sceneDuration={scene.duration} />
-              <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', padding: '0 9%'}}>
-                <SceneText text={scene.text} />
+          <Sequence key={scene.text} from={from} durationInFrames={scene.duration}>
+            <AbsoluteFill style={{opacity}}>
+              <SceneEnvironment
+                environment={scene.environment}
+                duration={scene.duration}
+                sceneIndex={index}
+              />
+
+              <AbsoluteFill
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 10%',
+                  textAlign: 'center',
+                }}
+              >
+                <SceneText
+                  text={scene.text}
+                  accent={index === 10 || index === 11}
+                />
               </AbsoluteFill>
             </AbsoluteFill>
           </Sequence>
         );
       })}
+
+      <GlitchOverlay />
     </AbsoluteFill>
   );
 };
