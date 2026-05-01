@@ -1,4 +1,3 @@
-import {theme} from '../styles/theme';
 import React from 'react';
 import {AbsoluteFill, Sequence, useCurrentFrame} from 'remotion';
 import {GlitchOverlay} from '../components/GlitchOverlay';
@@ -27,11 +26,16 @@ const scenes: Scene[] = [
   {text: 'A guerra agora segue o ritmo dos algoritmos.', duration: 102, environment: 'global-battle'},
 ];
 
-const getOpacity = (localFrame: number, duration: number) => {
-  const fadeIn = Math.min(1, localFrame / 10);
-  const fadeOut = Math.min(1, Math.max(0, (duration - localFrame) / 10));
-  return Math.max(0, Math.min(fadeIn, fadeOut));
+const sceneOpacity = (localFrame: number, sceneDuration: number) => {
+  const fadeInFrames = 10;
+  const fadeOutFrames = 10;
+
+  const inOpacity = clamp(localFrame / fadeInFrames, 0, 1);
+  const outOpacity = clamp((sceneDuration - localFrame) / fadeOutFrames, 0, 1);
+  return Math.min(inOpacity, outOpacity);
 };
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 export const AIWarVideo: React.FC = () => {
   const frame = useCurrentFrame();
@@ -39,24 +43,24 @@ export const AIWarVideo: React.FC = () => {
   let cursor = 0;
 
   return (
-    <AbsoluteFill style={{backgroundColor: theme.colors.background}}>
+    <AbsoluteFill style={{backgroundColor: '#000'}}>
       {scenes.map((scene, index) => {
         const from = cursor;
         cursor += scene.duration;
 
         const localFrame = frame - from;
-        const opacity = getOpacity(localFrame, scene.duration);
 
         return (
-          <Sequence key={scene.text} from={from} durationInFrames={scene.duration}>
-            <AbsoluteFill style={{opacity}}>
+          <Sequence key={`${scene.environment}-${index}`} from={from} durationInFrames={scene.duration}>
+            <AbsoluteFill style={{opacity: sceneOpacity(localFrame, scene.duration)}}>
               <SceneEnvironment environment={scene.environment} sceneIndex={index} />
+
               <AbsoluteFill
                 style={{
-                  display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  padding: '0 10%',
+                  paddingLeft: '10%',
+                  paddingRight: '10%',
                 }}
               >
                 <SceneText text={scene.text} accent={index === 10 || index === 11} />

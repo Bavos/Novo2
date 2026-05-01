@@ -6,32 +6,41 @@ type SceneTextProps = {
   accent?: boolean;
 };
 
-const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 export const SceneText: React.FC<SceneTextProps> = ({text, accent = false}) => {
   const frame = useCurrentFrame();
-  const {fps, width} = useVideoConfig();
+  const {fps, width, height} = useVideoConfig();
 
-  const entrance = spring({frame, fps, config: {damping: 14, stiffness: 120, mass: 0.7}});
-  const fadeIn = clamp(frame / 12, 0, 1);
-  const translateY = 40 - entrance * 40;
-  const entranceScale = 0.95 + entrance * 0.05;
-  const pulse = 1 + Math.sin(frame / 11) * 0.01;
+  const entry = spring({
+    frame,
+    fps,
+    config: {damping: 14, stiffness: 125, mass: 0.72},
+  });
+
+  const opacity = clamp(frame / 12, 0, 1);
+  const moveY = 36 - entry * 36;
+  const scaleIn = 0.955 + entry * 0.045;
+  const microPulse = 1 + Math.sin(frame / 10) * 0.009;
+
+  const fontSize = Math.max(56, Math.min(86, width * 0.07));
 
   return (
     <div
       style={{
         width: '70%',
-        color: accent ? '#fda4af' : '#e5f2ff',
+        color: accent ? '#fecaca' : '#e5f2ff',
         fontWeight: 800,
         textAlign: 'center',
-        fontFamily: 'Inter, Helvetica, Arial, sans-serif',
-        fontSize: Math.max(56, Math.min(88, width * 0.072)),
-        lineHeight: 1.18,
-        letterSpacing: '0.015em',
-        opacity: fadeIn,
-        transform: `translateY(${translateY}px) scale(${entranceScale * pulse})`,
+        fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+        fontSize,
+        lineHeight: 1.16,
+        letterSpacing: '0.012em',
+        opacity,
+        transform: `translateY(${moveY}px) scale(${scaleIn * microPulse})`,
         textShadow: '0 0 20px rgba(56,189,248,0.5), 0 6px 30px rgba(0,0,0,0.9)',
+        padding: `0 ${Math.max(18, width * 0.01)}px`,
+        maxWidth: Math.min(width * 0.78, height * 0.64),
       }}
     >
       {text}
