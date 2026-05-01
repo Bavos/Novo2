@@ -27,7 +27,7 @@ jobs:
         run: npx remotion browser ensure
 
       - name: Render video
-        run: npx remotion render ModernWarfare out/video.mp4 --composition=ModernWarfareMobile
+        run: npx remotion render ModernWarfaremobile out/video.mp4 --composition=ModernWarfareMobile
 
       - name: Upload MP4 artifact
         uses: actions/upload-artifact@v4
