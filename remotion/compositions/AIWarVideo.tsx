@@ -1,13 +1,7 @@
-import {theme} from '../styles/theme';
 import React from 'react';
-import {
-  AbsoluteFill,
-  Sequence,
-  interpolate,
-  useCurrentFrame,
-} from 'remotion';
+import {AbsoluteFill, Sequence, useCurrentFrame} from 'remotion';
 import {GlitchOverlay} from '../components/GlitchOverlay';
-import {SceneEnvironment} from '../components/SceneEnvironment';
+import {EnvironmentType, SceneEnvironment} from '../components/SceneEnvironment';
 import {SceneText} from '../components/SceneText';
 
 type Scene = {
@@ -17,20 +11,28 @@ type Scene = {
 };
 
 const scenes: Scene[] = [
-  {text: 'A guerra mudou.', duration: 90, environment: 'satellite'},
-  {text: 'A IA entrou no comando.', duration: 90, environment: 'ai-face'},
-  {text: 'Dados de drones, satélites e radares.', duration: 90, environment: 'tactical-map'},
-  {text: 'Tudo é processado em tempo real.', duration: 90, environment: 'data-center'},
-  {text: 'Alvos são classificados automaticamente.', duration: 90, environment: 'drone-vision'},
-  {text: 'A kill chain foi comprimida.', duration: 90, environment: 'kill-chain'},
-  {text: 'Detectar. Decidir. Atacar.', duration: 120, environment: 'command-modules'},
-  {text: 'O humano ainda aparece no loop.', duration: 120, environment: 'human-loop'},
-  {text: 'Mas só tem segundos para validar.', duration: 120, environment: 'critical-confirmation'},
-  {text: 'A confiança vira fé algorítmica.', duration: 120, environment: 'algorithmic-faith'},
-  {text: 'Erros podem virar tragédias.', duration: 120, environment: 'tragic-glitch'},
-  {text: 'Quem responde pela decisão?', duration: 120, environment: 'judgement-room'},
-  {text: 'A guerra agora segue o ritmo dos algoritmos.', duration: 90, environment: 'global-battle'},
-] as const;
+  {text: 'A guerra mudou.', duration: 104, environment: 'satellite'},
+  {text: 'A IA entrou no comando.', duration: 104, environment: 'ai-face'},
+  {text: 'Dados de drones, satélites e radares.', duration: 104, environment: 'tactical-map'},
+  {text: 'Tudo é processado em tempo real.', duration: 104, environment: 'data-center'},
+  {text: 'Alvos são classificados automaticamente.', duration: 104, environment: 'drone-vision'},
+  {text: 'A kill chain foi comprimida.', duration: 104, environment: 'kill-chain'},
+  {text: 'Detectar. Decidir. Atacar.', duration: 104, environment: 'command-modules'},
+  {text: 'O humano ainda aparece no loop.', duration: 104, environment: 'human-loop'},
+  {text: 'Mas só tem segundos para validar.', duration: 104, environment: 'critical-confirmation'},
+  {text: 'A confiança vira fé algorítmica.', duration: 104, environment: 'algorithmic-faith'},
+  {text: 'Erros podem virar tragédias.', duration: 104, environment: 'tragic-glitch'},
+  {text: 'Quem responde pela decisão?', duration: 104, environment: 'judgement-room'},
+  {text: 'A guerra agora segue o ritmo dos algoritmos.', duration: 102, environment: 'global-battle'},
+];
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+const sceneOpacity = (localFrame: number, duration: number) => {
+  const fadeIn = clamp(localFrame / 10, 0, 1);
+  const fadeOut = clamp((duration - localFrame) / 10, 0, 1);
+  return Math.min(fadeIn, fadeOut);
+};
 
 export const AIWarVideo: React.FC = () => {
   const frame = useCurrentFrame();
@@ -38,42 +40,27 @@ export const AIWarVideo: React.FC = () => {
   let cursor = 0;
 
   return (
-    <AbsoluteFill style={{backgroundColor: theme.colors.background}}>
+    <AbsoluteFill style={{backgroundColor: '#000'}}>
       {scenes.map((scene, index) => {
         const from = cursor;
         cursor += scene.duration;
 
         const localFrame = frame - from;
 
-        const opacity = interpolate(
-          localFrame,
-          [0, 8, scene.duration - 10, scene.duration - 1],
-          [0, 1, 1, 0],
-          {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
-        );
-
         return (
-          <Sequence key={scene.text} from={from} durationInFrames={scene.duration}>
-            <AbsoluteFill style={{opacity}}>
-              <SceneEnvironment
-                environment={scene.environment}
-                duration={scene.duration}
-                sceneIndex={index}
-              />
+          <Sequence key={`${scene.environment}-${index}`} from={from} durationInFrames={scene.duration}>
+            <AbsoluteFill style={{opacity: sceneOpacity(localFrame, scene.duration)}}>
+              <SceneEnvironment environment={scene.environment} sceneIndex={index} />
 
               <AbsoluteFill
                 style={{
-                  display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  padding: '0 10%',
-                  textAlign: 'center',
+                  paddingLeft: '10%',
+                  paddingRight: '10%',
                 }}
               >
-                <SceneText
-                  text={scene.text}
-                  accent={index === 10 || index === 11}
-                />
+                <SceneText text={scene.text} accent={index === 10 || index === 11} />
               </AbsoluteFill>
             </AbsoluteFill>
           </Sequence>
