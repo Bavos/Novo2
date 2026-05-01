@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  AbsoluteFill,
-  interpolate,
-  useCurrentFrame,
-} from 'remotion';
+import {AbsoluteFill, useCurrentFrame} from 'remotion';
 
 type Props = {
   environment: string;
@@ -13,29 +9,12 @@ type Props = {
 
 export const SceneEnvironment: React.FC<Props> = ({
   environment,
-  duration,
   sceneIndex = 0,
 }) => {
   const frame = useCurrentFrame();
 
-  // 🔥 GARANTE número válido SEMPRE
-  const safeDuration =
-    typeof duration === 'number' && !isNaN(duration)
-      ? duration
-      : 90;
-
-  // 🔥 SEMPRE números válidos
-  const progress = interpolate(
-    frame,
-    [0, safeDuration],
-    [0, 1],
-    {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    }
-  );
-
   const drift = Math.sin(frame / 40 + sceneIndex) * 20;
+  const zoom = 1 + frame * 0.0003;
 
   switch (environment) {
     case 'satellite':
@@ -43,8 +22,8 @@ export const SceneEnvironment: React.FC<Props> = ({
         <AbsoluteFill
           style={{
             background:
-              'radial-gradient(circle at 50% 80%, #0f172a 0%, #020617 50%, #000)',
-            transform: `scale(${1 + progress * 0.05}) translateX(${drift}px)`,
+              'radial-gradient(circle at 50% 80%, #0f172a 0%, #020617 50%, #000 100%)',
+            transform: `scale(${zoom}) translateX(${drift}px)`,
           }}
         />
       );
@@ -54,8 +33,8 @@ export const SceneEnvironment: React.FC<Props> = ({
         <AbsoluteFill
           style={{
             background:
-              'radial-gradient(circle at 50% 40%, rgba(239,68,68,0.35), transparent 40%), linear-gradient(#020617, #111827)',
-            transform: `scale(${1 + progress * 0.04})`,
+              'radial-gradient(circle at 50% 40%, rgba(239,68,68,0.35), transparent 40%), linear-gradient(180deg, #020617, #111827)',
+            transform: `scale(${zoom})`,
           }}
         />
       );
@@ -65,8 +44,8 @@ export const SceneEnvironment: React.FC<Props> = ({
         <AbsoluteFill
           style={{
             background:
-              'linear-gradient(135deg, #020617, #0f172a)',
-            transform: `translateY(${-progress * 100}px)`,
+              'linear-gradient(135deg, #020617, #0f172a, #00111f)',
+            transform: `translateY(${Math.sin(frame / 50) * 40}px)`,
           }}
         />
       );
@@ -76,8 +55,8 @@ export const SceneEnvironment: React.FC<Props> = ({
         <AbsoluteFill
           style={{
             background:
-              'repeating-linear-gradient(90deg, #020617 0px, #020617 80px, #0f172a 82px)',
-            transform: `scale(${1 + progress * 0.06})`,
+              'repeating-linear-gradient(90deg, #020617 0px, #020617 80px, #0f172a 82px, #0f172a 120px)',
+            transform: `scale(${zoom})`,
           }}
         />
       );
@@ -87,8 +66,8 @@ export const SceneEnvironment: React.FC<Props> = ({
         <AbsoluteFill
           style={{
             background:
-              'linear-gradient(#020617, #111827)',
-            transform: `translateX(${-progress * 80}px)`,
+              'linear-gradient(180deg, #020617, #111827)',
+            transform: `translateX(${Math.sin(frame / 35) * 50}px)`,
           }}
         />
       );
@@ -98,8 +77,8 @@ export const SceneEnvironment: React.FC<Props> = ({
         <AbsoluteFill
           style={{
             background:
-              'radial-gradient(circle, rgba(239,68,68,0.5), #020617 60%, #000)',
-            transform: `translateX(${Math.sin(frame) * 10}px)`,
+              'radial-gradient(circle, rgba(239,68,68,0.45), #020617 55%, #000)',
+            transform: `translateX(${Math.sin(frame) * 8}px)`,
           }}
         />
       );
@@ -109,8 +88,8 @@ export const SceneEnvironment: React.FC<Props> = ({
         <AbsoluteFill
           style={{
             background:
-              'linear-gradient(#020617, #0f172a, #000)',
-            transform: `scale(${1 + progress * 0.03})`,
+              'linear-gradient(180deg, #020617, #0f172a, #000)',
+            transform: `scale(${zoom})`,
           }}
         />
       );
