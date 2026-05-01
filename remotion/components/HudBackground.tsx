@@ -1,38 +1,29 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame} from 'remotion';
-import {theme} from '../styles/theme';
 
 export const HudBackground: React.FC = () => {
   const frame = useCurrentFrame();
-  const parallaxY = Math.sin(frame / 45) * 18;
-  const parallaxX = Math.cos(frame / 50) * 12;
-  const zoom = 1 + frame * 0.00008;
 
   return (
-    <AbsoluteFill
-      style={{
-        background: `radial-gradient(circle at 50% 50%, #0b1522 0%, ${theme.colors.background} 72%)`,
-        overflow: 'hidden'
-      }}
-    >
+    <AbsoluteFill style={{pointerEvents: 'none'}}>
       <div
         style={{
           position: 'absolute',
-          inset: '-6%',
-          opacity: 0.35,
-          backgroundImage:
-            'linear-gradient(rgba(78,168,222,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(78,168,222,0.2) 1px, transparent 1px)',
-          backgroundSize: '80px 80px',
-          transform: `translate(${parallaxX}px, ${parallaxY}px) scale(${zoom})`
+          inset: '6%',
+          border: '1px solid rgba(78,168,222,0.25)',
+          borderRadius: 18,
+          boxShadow: '0 0 18px rgba(78,168,222,0.16) inset'
         }}
       />
       <div
         style={{
           position: 'absolute',
-          inset: 0,
-          background:
-            'linear-gradient(120deg, rgba(4,7,12,0.8), rgba(4,7,12,0.2), rgba(4,7,12,0.8))',
-          transform: `translateX(${Math.sin(frame / 60) * 20}px)`
+          top: '12%',
+          left: '8%',
+          right: '8%',
+          height: 1,
+          background: 'linear-gradient(90deg, transparent, rgba(78,168,222,0.5), transparent)',
+          transform: `translateX(${Math.sin(frame / 80) * 15}px)`
         }}
       />
     </AbsoluteFill>

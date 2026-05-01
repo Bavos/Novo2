@@ -9,7 +9,8 @@ type SceneTextProps = {
 
 export const SceneText: React.FC<SceneTextProps> = ({text, accent = false}) => {
   const frame = useCurrentFrame();
-  const {fps, height, width} = useVideoConfig();
+  const {fps, width, height} = useVideoConfig();
+  const isVertical = height > width;
 
   const entrance = spring({
     frame,
@@ -23,12 +24,14 @@ export const SceneText: React.FC<SceneTextProps> = ({text, accent = false}) => {
   const pulse = 1 + Math.sin(frame / 10) * 0.008;
   const driftX = Math.sin(frame / 32) * 5;
 
-  const fontSize = Math.max(48, Math.min(72, width * 0.038));
+  const fontSize = isVertical
+    ? Math.max(54, Math.min(84, width * 0.07))
+    : Math.max(48, Math.min(72, width * 0.038));
 
   return (
     <div
       style={{
-        width: theme.safe.contentWidth,
+        width: isVertical ? '80%' : '60%',
         textAlign: 'center',
         fontFamily: theme.fontFamily,
         color: accent ? theme.colors.tacticalRed : theme.colors.textPrimary,
