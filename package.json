@@ -1,5 +1,19 @@
-"scripts": {
-  "start": "remotion studio src/index.ts",
-  "build:vertical": "npx remotion render src/index.ts AIWarVertical out/ai-war-vertical.mp4 --disable-web-security",
-  "build": "npm run build:vertical"
+{
+  "name": "ai-war-remotion",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "remotion studio src/index.ts",
+    "build:vertical": "npx remotion render src/index.ts AIWarVertical out/ai-war-vertical.mp4 --disable-web-security",
+    "build": "npm run build:vertical"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "remotion": "latest",
+    "@remotion/cli": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
 }
