@@ -4,8 +4,8 @@
   "private": true,
   "description": "Projeto Remotion para renderização programática de vídeo vertical.",
   "scripts": {
-    "render": "remotion render Composition.tsx AlgoritmicWarVertical out/video.mp4",
-    "render:preview": "remotion studio Composition.tsx",
+    "render": "remotion render src/index.ts ModernWarfareMobile out/video.mp4",
+    "render:preview": "remotion studio src/index.ts",
     "browser:ensure": "remotion browser ensure"
   },
   "dependencies": {
