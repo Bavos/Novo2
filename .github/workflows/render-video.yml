@@ -1,10 +1,9 @@
-name: Render AI War Video
+name: Render Vertical AI War Video
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   render:
@@ -28,8 +27,11 @@ jobs:
       - name: Render vertical video
         run: npm run build:vertical
 
-      - name: List generated files
-        run: ls -lah out
+      - name: Verify MP4 exists
+        run: |
+          echo "Generated files:"
+          ls -lah out
+          test -f out/ai-war-vertical.mp4
 
       - name: Upload MP4 artifact
         uses: actions/upload-artifact@v4
