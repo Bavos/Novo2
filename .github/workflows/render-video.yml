@@ -1,38 +1,17 @@
-name: Render AI War Video
+name: Render Vertical AI War Video
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   render:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Render videos
-        run: npm run build
-
-      - name: Upload horizontal artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ai-war-horizontal
-          path: out/ai-war-horizontal.mp4
-
-      - name: Upload vertical artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ai-war-vertical
-          path: out/ai-war-vertical.mp4
+          node-version: 20
+      - run: npm ci
+      - run: npm run build:vertical
