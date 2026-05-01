@@ -6,9 +6,5 @@ export const theme = {
     textPrimary: '#DDEAF6',
     textSecondary: '#9AB0C7'
   },
-  safe: {
-    horizontalPadding: '20%',
-    contentWidth: '60%'
-  },
   fontFamily: 'Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
 };

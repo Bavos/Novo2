@@ -18,16 +18,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Render video
+      - name: Render videos
         run: npm run build
 
-      - name: Upload artifact
+      - name: Upload horizontal artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ai-war-algorithmic
-          path: out/ai-war-algorithmic.mp4
+          name: ai-war-horizontal
+          path: out/ai-war-horizontal.mp4
+
+      - name: Upload vertical artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-war-vertical
+          path: out/ai-war-vertical.mp4
